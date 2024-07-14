@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id String @id @default(uuid())
+  name String
+  status restaurantStatusType
+}
+
+model FoodItem {
+  id String @id @default(uuid())
+  restaurantId String 
+  itemName String
+  description String
+  price Int
+}
+
+model Order {
+  id String @id @default(uuid())
+  items Json[]
+  totalPrice Int
+  orderStatus orderStatusType?
+  assignedUser String?
+  deliveryStatus deliveryStatusType?
+  rating Int?
+  foodRating Int?
+}
+
+model DeliveryUser {
+  id String @id @default(uuid())
+  agentName String
+  status delUserStatusType
+}
+
+enum restaurantStatusType {
+  Online
+  Offline
+}
+
+enum delUserStatusType {
+  Busy
+  Available
+}
+
+enum orderStatusType {
+  Accepted
+  Rejected
+}
+
+enum deliveryStatusType {
+  InProgress
+  Delivered
+}
