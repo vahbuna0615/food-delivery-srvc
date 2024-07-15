@@ -17,13 +17,14 @@ model FoodItem {
   id String @id @default(uuid())
   restaurantId String 
   itemName String
-  description String
+  description String?
   price Int
 }
 
 model Order {
   id String @id @default(uuid())
-  items Json[]
+  restaurantId String
+  items Json
   totalPrice Int
   orderStatus orderStatusType?
   assignedUser String?
