@@ -1,6 +1,4 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { DeliveryUser } from '@prisma/client';
-import { error } from 'console';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
@@ -11,6 +9,27 @@ export class DeliveryService {
   createDeliveryUser(data: any) {
     return this.databaseService.deliveryUser.create({
       data
+    })
+  }
+
+  // Get all delivery users
+  getAllDeliveryUsers(available: boolean) {
+    if (available) return this.databaseService.deliveryUser.findMany({
+      where: {
+        status: 'Available'
+      }
+    })
+
+    return this.databaseService.deliveryUser.findMany()
+  }
+
+  // Update given delivery user
+  updateDeliveryUser(id: string, body: any) {
+    return this.databaseService.deliveryUser.update({
+      where: {
+        id
+      },
+      data: body
     })
   }
 
@@ -62,6 +81,11 @@ export class DeliveryService {
     return this.databaseService.order.create({
       data
     })
+  }
+
+  // Get all orders
+  getAllOrders() {
+    return this.databaseService.order.findMany()
   }
 
   // View order details of a given order

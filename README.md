@@ -1,73 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Project - Food Delivery Backend Service
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
+NestJS backend service with PostgreSQL and Prisma to handle food delivery for multiple restaurants.
 
-## Description
+## Technologies
+- **NestJS**
+- **PostgreSQL**
+- **Prisma**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites  
+- Run all prisma migrations present, in case of a local setup ( **Command** - `npm run migrations:all`). 
+- Add a restaurant of status 'Online' and food items for the same, before creating an order. Also add delivery users with status 'Available'.
+- The 'Important Endpoints' can be used to simulate the flow of the project. For further testing, the 'Additional Endpoints' can be used as well.
 
-## Installation
+## Important Endpoints
 
-```bash
-$ npm install
+### 1. Add a New Restaurant
+
+**Endpoint:** `POST /restaurant`
+
+**Request Body:**
+```json
+{
+  "name": "RestaurantName",
+  "status": "Online"
+}
+```
+---
+
+### 2. Add a New Food Item
+
+**Endpoint:** `POST /restaurant/food-item`
+
+**Request Body:**
+```json
+{
+  "restaurantId": "da5a3398-3f45-4539-9c63-848644faccc8",
+  "itemName": "Food item name",
+  "description": "Food item description",
+  "price": 10
+}
+```
+---
+
+### 3. Get a List of Available Restaurants
+
+**Endpoint:** `GET /restaurant?available=true`
+
+---
+
+### 4. Add Delivery Users
+
+**Endpoint:** `POST /delivery/user`
+
+**Request Body:**
+```json
+{
+  "agentName": "user 4",
+  "status": "Available"
+}
+```
+---
+
+### 5. Get the Menu of Available Items of a Given Restaurant
+
+**Endpoint:** `GET /delivery/:resId/menu`
+
+---
+
+### 6. Create a New Order
+
+**Endpoint:** `POST /delivery/:resId/order`
+
+**Request Body:**
+```json
+{
+  "items": ["8b0a0638-33a2-4bd3-8f11-31b267ce10de", "af002256-04a6-460d-a7a3-2d3385500460"]
+}
 ```
 
-## Running the app
+---
 
-```bash
-# development
-$ npm run start
+### 7. Endpoint for Simulating the Restaurant Accepting/Rejecting Given Order
 
-# watch mode
-$ npm run start:dev
+**Endpoint:** `PUT /delivery/order/:id/status`
 
-# production mode
-$ npm run start:prod
+---
+
+### 8. Endpoint for Completing Delivery
+
+**Endpoint:** `PUT /delivery/order/:id/delivered`
+
+---
+
+### 9. Endpoint for Updating Ratings of an Order After Delivery is Completed
+
+**Endpoint:** `PUT /delivery/order/:id/ratings`
+
+**Request Body:**
+```json
+{
+  "rating": 3,
+  "foodRating": 5
+}
 ```
 
-## Test
+## Additional Endpoints
 
-```bash
-# unit tests
-$ npm run test
+### 1. Get All Food Items
 
-# e2e tests
-$ npm run test:e2e
+**Endpoint:** `GET /restaurant/food-item`
 
-# test coverage
-$ npm run test:cov
-```
+---
+### 2. Get All Restaurants
 
-## Support
+**Endpoint:** `GET /restaurant`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
+### 3. Update Food Item
 
-## Stay in touch
+**Endpoint:** `PUT /restaurant/food-item/:id`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
+### 4. Update Restaurant Info
 
-## License
+**Endpoint:** `PUT /restaurant/:id`
 
-Nest is [MIT licensed](LICENSE).
+---
+### 5. Get All Delivery Users
+
+**Endpoint:** `GET /delivery/user`
+
+---
+### 6. Get All Orders
+
+**Endpoint:** `GET /delivery/order`
+
+---
+### 7. Get Order Info
+
+**Endpoint:** `GET /delivery/order/:id`
+
+---
+### 8. Update a Delivery User's Info
+
+**Endpoint:** `PUT /delivery/user/:id`
+
+---
+### 9. Update an Order Info
+
+**Endpoint:** `PUT /delivery/order/:id`
