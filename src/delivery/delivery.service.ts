@@ -163,7 +163,7 @@ export class DeliveryService {
   // Complete delivery
   async completeDelivery(id: string) {
 
-    const order = await this.databaseService.order.findFirst({
+    const order = await this.databaseService.order.findUnique({
       where: {
         id
       }
